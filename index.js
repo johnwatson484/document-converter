@@ -3,6 +3,9 @@ const path = require('path')
 const fs = require('fs')
 
 const inboundFolder = path.join(__dirname, 'inbound')
+const outboundFolder = path.join(__dirname, 'outbound')
+
+CreateWorkingDirectory()
 
 fs.readdir(inboundFolder, function (err, files) {
   if (err) {
@@ -15,16 +18,24 @@ fs.readdir(inboundFolder, function (err, files) {
   })
 })
 
+function CreateWorkingDirectory () {
+  if (!fs.existsSync(inboundFolder)) {
+    fs.mkdirSync(inboundFolder)
+  }
+  if (!fs.existsSync(outboundFolder)) {
+    fs.mkdirSync(outboundFolder)
+  }
+}
+
 function convertFile (file) {
-  const filePath = path.join('./inbound', file)
+  const filePath = path.join(inboundFolder, file)
   const name = `${path.basename(file, '.docx')}_${new Date().getTime()}`
   const args = `-f docx -t markdown -o ./outbound/${name}.md`
-  console.log(args)
-  // Set your callback function
+
   const callback = (err, result) => {
-    if (err) { console.error('Oh Nos: ', err) }
+    if (err) { console.error(err) }
     return result
   }
-  // Call pandoc
+
   nodePandoc(filePath, args, callback)
 }
