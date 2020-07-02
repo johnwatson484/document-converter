@@ -2,5 +2,5 @@
 Prototype Node.js application to convert document format using pandoc.
 
 ## Depenencies
-Node v10
+Node v10  
 Pandoc
